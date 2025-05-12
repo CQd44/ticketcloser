@@ -1,0 +1,8 @@
+[credentials]
+dbname = 'responses'
+username = 'postgres'
+password = 'postgres'
+
+[comms]
+server = 'mail.dhr-rgv.com'
+port = 25
