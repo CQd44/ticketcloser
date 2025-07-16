@@ -7,3 +7,6 @@ password = 'postgres'
 [comms]
 server = 'mail.dhr-rgv.com'
 port = 25
+from = 'CallCenterSupportSubmission@dhr-rgv.com'
+phones = ['+19565251888@tmomail.net']
+emails = ['william.youngiv@dhr-rgv.com']

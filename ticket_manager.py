@@ -10,7 +10,7 @@ import csv
 CONFIG = toml.load("./config.toml") # load variables from toml file. 
 
 class OpenState: # Avoids using global variables
-    OPEN: any = 'ALL' # Keeps track of whether you're looking at open, closed, or all tickets
+    OPEN: any = 'ALL' # type: ignore # Keeps track of whether you're looking at open, closed, or all tickets
     SELECTED_ROW: int = 0 # I shouldn't need to explain this. 
     data: list = [] # list that holds the data the table / treeview is comprised of
     view_cols: list[str] = ['id', 'name', 'clinic', 'issue', 'entrydate', 'open', 'remarks'] # default view
@@ -182,15 +182,16 @@ def close_ticket():
                 update_data()
 
 def select_view():
+    _current_cols = OpenState.view_cols
     OpenState.view_cols = multchoicebox(title = 'View Selector', 
                                         msg = 'Select the columns you wish to view',
                                         choices = ['id', 'name', 'clinic', 'issue', 'entrydate', 'open', 'remarks', 'ip_addr', 'hostname'],
-                                        preselect = [0, 1, 2, 3, 4, 5, 6]
+                                        preselect = [0, 1, 2, 3, 4, 5, 6] # type: ignore
                                         )
     if OpenState.view_cols == None:
-        msgbox(title = 'Error!',
-               msg = 'At least one selection must be made!')
-        select_view()
+        msgbox(title = 'Cancelling!',
+               msg = 'Action cancelled!')
+        OpenState.view_cols = _current_cols
     else:
         OpenState.button_frame.destroy()
         OpenState.image_label.destroy()
@@ -201,7 +202,7 @@ def select_view():
         update_data()
 
 def generate_report():
-    RESULTS: list[any] = []
+    RESULTS: list = []
 
     con = psycopg2.connect(f'host = {CONFIG['credentials']['host']} dbname = {CONFIG['credentials']['dbname']} user = {CONFIG['credentials']['username']} password = {CONFIG['credentials']['password']}')
     cur = con.cursor()
